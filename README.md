@@ -38,6 +38,14 @@
  * cmake3 .
  * make
  * ./game
+
+ ## Running with Docker
+ * Prefer not to install a C++ toolchain? A Docker setup is included that builds the game and its tests in a container — you only need [Docker Desktop](https://www.docker.com/products/docker-desktop/).
+ * From the repository root:
+   * Play the game (interactive): `docker compose run --rm game`
+   * Run the unit tests: `docker compose run --rm test`
+ * The first run builds the image (compiles the game and tests); later runs reuse it. Verified to build and pass all 74 unit tests on Ubuntu 24.04 with g++ 13.
+
  ## Testing
  * To ensure that the large number of classes we implemented is error free, we used googletest. With the help of the googeltest, we created unit tests and tested every single function in our classes and verified that they passed their tests through running the test executable.
  ![unittests](https://user-images.githubusercontent.com/5094397/101940987-367c8800-3b9c-11eb-96da-a9fb61f6b56f.png)

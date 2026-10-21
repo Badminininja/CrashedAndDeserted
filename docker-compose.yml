@@ -1,0 +1,14 @@
+# Build once, then:
+#   docker compose run --rm game   -> play the game (interactive)
+#   docker compose run --rm test   -> run the googletest unit tests
+services:
+  game:
+    build: .
+    image: crashed-and-deserted
+    stdin_open: true   # the game reads your keyboard input...
+    tty: true          # ...so give it an interactive terminal
+
+  test:
+    build: .
+    image: crashed-and-deserted
+    command: ["./build/test"]
