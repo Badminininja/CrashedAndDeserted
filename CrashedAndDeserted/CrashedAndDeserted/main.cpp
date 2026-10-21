@@ -6,6 +6,8 @@
 
 #include <iostream>
 #include <vector>
+#include <limits>
+#include <cstdlib>
 #include "characterRace.hpp"
 #include "animalRace.hpp"
 #include "humanRace.hpp"
@@ -15,6 +17,20 @@
 #include "Dice20App.hpp"
 
 using namespace std;
+
+// Reads an integer from the user. If they type something that isn't a number,
+// cin would otherwise enter a fail state and any validation loop would spin
+// forever, so we clear the error, discard the bad input, and ask again.
+int readInt() {
+    int value;
+    while (!(cin >> value)) {
+        if (cin.eof()) { exit(0); }   // input closed (piped end / Ctrl+D): quit cleanly
+        cin.clear();
+        cin.ignore(numeric_limits<streamsize>::max(), '\n');
+        cout << "Please enter a number: ";
+    }
+    return value;
+}
 
 Character* openingScene(CharacterRace* typeCharacter, Character* userCharacter);
 int firstScene(Character* userCharacter, vector<string>& progress);
@@ -114,7 +130,7 @@ Character* openingScene(CharacterRace* typeCharacter, Character* userCharacter) 
     cout << "Judge: Ok " << name << ", is your race an animal or human?" << endl;
     cout << "(Enter 1 for animal or 2 for human)" << endl;
     while ((response != 1) && (response != 2)) {
-        cin >> response;
+        response = readInt();
         if (response == 1) {
             typeCharacter = new AnimalRace();
         } else if (response == 2) {
@@ -129,7 +145,7 @@ Character* openingScene(CharacterRace* typeCharacter, Character* userCharacter) 
     cout << "(Enter 1 for warrior or 2 for mage)" << endl;
     response = 0;
     while ((response != 1) && (response != 2)) {
-        cin >> response;
+        response = readInt();
         if (response == 1) {
             character = typeCharacter->createWarrior(name);
         } else if (response == 2) {
@@ -182,7 +198,7 @@ int firstScene(Character* userCharacter, vector<string>& progress) {
     cout << "(Enter 2 to trek along the beach)" << endl;
     cout << "(Enter 3 to view your stats)" << endl;
     while ((response != 1) && (response != 2)) {
-        cin >> response;
+        response = readInt();
         if (response == 1) {
             cout << "You decided to brave the dark forest." << endl;
             progress.push_back("You decided to brave the dark forest.");
@@ -215,7 +231,7 @@ string beachScene(Character* userCharacter, vector<string> progress){
 	cout << "(Enter 3) Ignore him and keep walking along the beach? Who knows who or what he is, it's best to just leave him be. Plus, he is sleeping so might as well let him sleep." <<endl;
 	cout << "(Enter 4 for stats)"<<endl;
 	while((response !=1) && (response !=2) && (response !=3)){
-		cin >> response;
+		response = readInt();
 		if(response ==1){
 			cout << "The guy sleeping woke up and noticed you. He does an inviting gesture and you walk up a bit closer so you can talk to him." <<endl;//DIALOGUE
 			return BeachDialogue(userCharacter, progress);
@@ -259,7 +275,7 @@ string BeachDialogue(Character* userCharacter, vector<string> progress){
         cout << "(Enter 5) You know all that you need to know, say a farewell and continue along the beach" << endl;
 	cout << "(Enter 6) view stats" <<endl;
 	while((response !=4) && (response !=5)){
-		cin >>response;
+		response = readInt();
 		if (response == 1){
 			cout << "So far as I know, this place is a small island, located who knows where. The forest covers most of the area, there’s plenty of food in there so it's pretty easy to continue living here." <<endl;
 			cout << "Anything else you want to know? (1 area, 2 how, 3 anyone, 4 why, 5 leave, 6 stats)" <<endl;
@@ -309,7 +325,7 @@ string forestScene(Character* userCharacter, vector<string> progress){
 	cout << "(Enter 3) Climb up a nearby tree close to the trail in order to get a better view of the situation and in hope that said noise won't notice you." << endl;
 	cout << "(Enter 4) view stats" <<endl;
 	while((response !=1) && (response !=2) && (response !=3)){
-		cin >> response;
+		response = readInt();
 		if(response == 1){
 			cout << "You decide to confront the sound coming from the trail. You believe this is the best choice, I mean you have no clue about where you’re at nor anything about this area or what’s going on. As you get closer to the noise you could see a humanoid figure to your delight; however, upon closer inspection you see that the figure is actually a Goblin suited with light metal armor across his whole body. What was worse is that you can see that he has a badge indicating servitude toward the court which means people still monitor this area, but that does mean there is a mode of transportation available." <<endl;
 			cout << "CHOICES With him close enough for both of you to see each other what do you do."<<endl;
@@ -318,7 +334,7 @@ string forestScene(Character* userCharacter, vector<string> progress){
 			cout << "(Enter 3) view stats" <<endl;
 			response = 0;
 			while((response !=1) && (response !=2) && (response !=3)){	
-				cin >> response;
+				response = readInt();
 				if(response == 1){
 					cout << "The Goblin throws a small knife hitting your leg and slowing you down enough for him to get to you" <<endl;
 					//PLAYER FREE HIT
@@ -345,7 +361,7 @@ string forestScene(Character* userCharacter, vector<string> progress){
 			cout << "(Enter 3) view stats" <<endl;
 			response = 0;
 			while((response !=1) && (response !=2)){
-				cin >>response;
+				response = readInt();
 				if(response ==1){
 					return "Investigate Structure Scene";
 				}
@@ -375,7 +391,7 @@ string forestScene(Character* userCharacter, vector<string> progress){
 			cout << "(Enter 3) View Stats" <<endl;
 			response = 0;
 			while((response !=1) && (response !=2)){
-				cin >> response;
+				response = readInt();
 				if(response == 1){
 					cout << "Goblin grunts in pain “haah, an exile stabbing me in the back, how typical”" <<endl;
 					//Goblin Takes free hit
@@ -408,7 +424,7 @@ string forestScene(Character* userCharacter, vector<string> progress){
 			cout << "(Enter 3) view stats" <<endl;
 			response = 0;
                         while((response !=1) && (response !=2)){
-				cin >> response;
+				response = readInt();
 				if(response == 1){
 					return "Investigate Structure Scene";
 				}else if(response ==2){
@@ -452,7 +468,7 @@ string investigateStructureScene(Character* userCharacter, vector<string> progre
 	cout << "(Enter 2) Look around to see if it's possible to climb over the walls and get into the structure without having to use the front door." <<endl;
 	cout << "(Enter 3) view Stats" <<endl;
 	while((response !=1) && (response !=2)){
-		cin >> response;
+		response = readInt();
 		if(response == 1){
 			cout << "You were right. It was pretty much empty in the building save for some amenities and foodstuffs. It seemed like it was only really meant to accommodate one or a few people." <<endl;
 			return "Boss Scene Front";
@@ -483,7 +499,7 @@ string waterfallScene(Character* userCharacter, vector<string> progress){
 	cout << "(Enter 1) Accept Quest" <<endl;
 	cout << "(Enter 2) Decline Quest" <<endl;
 	cout << "(Enter 3) view Stats" <<endl;
-		cin >> response;
+		response = readInt();
 		if(response == 1){
 			cout << "you start to hear joyful glees from the pixie and then another and then another. Then you start to hear them giggle again as you start to become more and more delirious. Before knocking out you hear one of them say “Good luck, our saviour” When you awake you are nowhere near the waterfall as its sound cannot be heard anymore, and you seem to not feel the ground. As you look down, you see that you are indeed flying, but as you realize this you once again hear a giggle from one pixie then she says “times up” then you start to feel gravity kick in and you feel as though you are now going to fall to your death; however, your fall is broken and it seems you landed on a balcony and looking around you see that your in something like a medieval structure similar to a castle" <<endl;
 			return "Boss Scene Back";
@@ -507,7 +523,7 @@ string beach2Scene(Character* userCharacter, vector<string> progress){
 	cout << "(Enter 2) Stalk and follow the pursuers" <<endl;
 	cout << "(Enter 3) view Stats" <<endl;
 	while((response !=1) && (response !=2)){	
-		cin >> response;
+		response = readInt();
 		if(response == 1){
 			cout << "You hurry toward the boat while the two pursuers are distracted by the exile. As you enter the boat you hear a single high pitched beep. You look to try to start up the boat and get off this forsaken island but you can’t find a key anywhere. After searching for the key for a bit, you hear the beeping get increasingly louder and faster. At one point the beeping stops. You take a deep sigh of relief. And then you get electrified by the boat so much so you lose consciousness. When you wake up you’re next to a door on what looks like a medieval structure." <<endl;
 			return "Boss Scene Front";
@@ -541,7 +557,7 @@ string bossSceneFront(Character* userCharacter, vector<string> progress){
 	cout << "(Enter 1) yell: “YOU DIRTY ASSASSIN I’LL F**KING KILL YOU”"<<endl;
 	cout << "(Enter 2) yell: “B*TCH, THOSE WERE MY FRIENDS, I'LL KILL YOU”"<<endl;
 	cout << "(Enter 3) view stats" <<endl;
-	cin >> response;
+	response = readInt();
 	if((response == 1)||(response == 2) ){
 		cout << "Boss: Heh, now thats more like it"<<endl;
 		BossBattle(userCharacter, progress);
@@ -562,7 +578,7 @@ string bossSceneBack(Character* userCharacter, vector<string> progress){
 	cout << "(Enter 1) Lay a trap for him" <<endl;
 	cout << "(Enter 2) Ambush him when he enters the room" <<endl;
 	cout << "(Enter 3 view Stats" <<endl;
-	cin >> response;
+	response = readInt();
 	if(response == 1){
 		cout << "The man enters the room, to immediately notice his prized achievement of a pendant gone. He looks shaken, but before he can’t even call out “who goes there” an arrow shoots from the side of the room and hits him around his waist (Boss takes a free hit) Afterwards you jump in to try to get another hit but he parries by unsheathing his sword." <<endl;
 		BossBattle(userCharacter, progress);
@@ -619,7 +635,7 @@ void GoblinBattle(Character* player, vector<string> progress) {
 		int userInput = -1;
 		
 		while ((userInput != 1) && (userInput != 2) && (userInput != 3) && (userInput != 4)) {
-		cin >> userInput;
+		userInput = readInt();
 			if (userInput == 1) {
 				
 				GobDice->roll();
@@ -755,7 +771,7 @@ void ExiledMemberBattle(Character* player, vector<string> progress) {
         
 	
         while ((userInput != 1) && (userInput != 2) && (userInput != 3) && (userInput != 4)) {
-            cin >> userInput;
+            userInput = readInt();
 		
 	    if (userInput == 1) {
                 
@@ -893,7 +909,7 @@ void BossBattle(Character* player, vector<string> progress) {
         int userInput = -1;
         
         while ((userInput != 1) && (userInput != 2) && (userInput != 3) && (userInput != 4)) {
-		cin >> userInput;
+		userInput = readInt();
             if (userInput == 1) {
 
                 bossDice->roll();
